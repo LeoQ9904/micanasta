@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HeaderComponent from "./src/common/components/HeaderComponent";
 import { FooterComponent } from "./src/common/components/FooterComponent";
+import StoreInitializer from "./src/common/components/StoreInitializer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
     return (
         <html lang="en">
             <head>
@@ -42,6 +44,7 @@ export default function RootLayout({
                 className="antialiased"
                 style={{ fontFamily: "Nunito, sans-serif" }}
             >
+                <StoreInitializer />
                 <HeaderComponent />
                 {children}
             </body>

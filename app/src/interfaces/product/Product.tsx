@@ -8,4 +8,5 @@ export interface IProduct {
     discount: number;
     images: string[];
     categories: ICategory[];
+    popular: boolean;
 }

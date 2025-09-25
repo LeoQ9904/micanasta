@@ -1,3 +1,9 @@
 export default function Home() {
-    return "";
+    return (
+        <div>
+            <div>
+                Products Page
+            </div>
+        </div>
+    );
 }

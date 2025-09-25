@@ -14,7 +14,7 @@ export default function NotasComponent() {
                     sx={{
                         boxShadow: "none",
                         borderRadius: "16px",
-                        backgroundImage: card.bg ? `url(${card.bg})` : "none",
+                        backgroundImage: card.img ? `url(${card.img})` : "none",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}

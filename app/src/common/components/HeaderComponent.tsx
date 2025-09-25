@@ -1,6 +1,6 @@
 "use client";
 import { Search } from "@mui/icons-material";
-import { Badge, Drawer, IconButton } from "@mui/material";
+import { Badge, Button, Drawer, IconButton } from "@mui/material";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import PopoverMenuComponent from "./PopoverMenuComponent";
@@ -13,11 +13,11 @@ import Cart from "@/app/cart/components/cart";
 import { notions } from "@/app/data/data";
 import CloseButton from "./utils/close";
 import { useCartStore } from "../../store/cartStore";
+import CategoriesListComponent from "./CatagoriesListComponent";
 export default function HeaderComponent() {
     const { scrollY } = useScroll();
 
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [openCart, setOpenCart] = useState(false);
 
     const totalItemsCart = useCartStore((state) =>
         state.items.reduce((acc, item) => acc + item.quantity, 0)
@@ -50,6 +50,8 @@ export default function HeaderComponent() {
                     alt="Mi Canasta"
                     width={120}
                     height={40}
+                    className="cursor-pointer"
+                    onClick={() => (window.location.href = "/")}
                 />
                 <div className="flex gap-4 divide-x-1 divide-gray-300 items-center border-2 border-[var(--border-color)] rounded-md ml-8 px-2 py-1 ">
                     <select className="px-3 py-2 bg-transparent outline-none font-bold cursor-pointer">
@@ -74,9 +76,17 @@ export default function HeaderComponent() {
                     <ul className="flex gap-4">
                         <li
                             className="flex gap-1 items-center cursor-pointer"
-                            onClick={() => setOpenCart(true)}
+                            onClick={() => useCartStore.getState().toggleCart()}
                         >
-                            <Badge badgeContent={totalItemsCart} sx={{"& .MuiBadge-badge": {backgroundColor: "var(--primary)", color: "white",},}} >
+                            <Badge
+                                badgeContent={totalItemsCart}
+                                sx={{
+                                    "& .MuiBadge-badge": {
+                                        backgroundColor: "var(--primary)",
+                                        color: "white",
+                                    },
+                                }}
+                            >
                                 <CartIcon />
                             </Badge>
                             <a href="#">Canasta</a>
@@ -94,39 +104,40 @@ export default function HeaderComponent() {
                         <li>
                             <PopoverMenuComponent
                                 Title="Categorías"
-                                Children={categories.map((category) => (
-                                    <span
-                                        key={category.id}
-                                        className="cursor-pointer hover:bg-gray-100 px-4 py-2 block"
-                                    >
-                                        {category.name}
-                                    </span>
-                                ))}
+                                Children={<CategoriesListComponent />}
                             />
                         </li>
                         <li className="">
-                            <PopoverMenuComponent
-                                Title="Recomendación del día"
-                                Children={
-                                    <>
-                                        <div>Opción 1</div>
-                                        <div>Opción 2</div>
-                                        <div>Opción 3</div>
-                                    </>
-                                }
-                            />
+                            <Button
+                                sx={{
+                                    textTransform: "none",
+                                    fontWeight: "700",
+                                    color: "#4b5563",
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                        color: "var(--primary)",
+                                    },
+                                    fontSize: "16px",
+                                }}
+                            >
+                                Ofertas del día
+                            </Button>
                         </li>
                         <li className="">
-                            <PopoverMenuComponent
-                                Title="Promociones"
-                                Children={
-                                    <>
-                                        <div>Opción 1</div>
-                                        <div>Opción 2</div>
-                                        <div>Opción 3</div>
-                                    </>
-                                }
-                            />
+                            <Button
+                                sx={{
+                                    textTransform: "none",
+                                    fontWeight: "700",
+                                    color: "#4b5563",
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                        color: "var(--primary)",
+                                    },
+                                    fontSize: "16px",
+                                }}
+                            >
+                                Nuevos productos
+                            </Button>
                         </li>
                     </ul>
                 </nav>
@@ -142,8 +153,8 @@ export default function HeaderComponent() {
             </header>
             <Drawer
                 anchor="right"
-                open={openCart}
-                onClose={() => setOpenCart(false)}
+                open={useCartStore.getState().openCart}
+                onClose={() => useCartStore.getState().toggleCart()}
                 sx={{
                     "& .MuiDrawer-paper": {
                         marginTop: "16px",
@@ -154,7 +165,9 @@ export default function HeaderComponent() {
                     },
                 }}
             >
-                <CloseButton onClick={() => setOpenCart(false)} />
+                <CloseButton
+                    onClick={() => useCartStore.getState().toggleCart()}
+                />
                 <Cart />
             </Drawer>
         </>

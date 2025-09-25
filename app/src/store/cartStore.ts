@@ -9,21 +9,30 @@ export interface CartItem {
 
 interface CartStore {
     items: CartItem[];
+    openCart: boolean;
     addItem: (product: IProduct, quantity?: number) => void;
     removeItem: (productTitle: string) => void;
     updateQuantity: (productTitle: string, quantity: number) => void;
     clearCart: () => void;
     getTotal: () => number;
+    toggleCart: () => void;
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
     items: [],
+    openCart: false,
+
+    toggleCart: () => {
+        set((state) => ({ openCart: !state.openCart }));
+    },
 
     addItem: (product: IProduct, quantity = 1) => {
         set((state) => {
             const existingItem = state.items.find(
                 (item) => item.product.title === product.title
             );
+
+            useCartStore.getState().toggleCart();
 
             if (existingItem) {
                 return {
