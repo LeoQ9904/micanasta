@@ -16,14 +16,14 @@ export default function Destacados() {
     const selectCategory = (category: string) => {
         setCategorySelect(category);
         setPopularProducts(filterPopularProductsByCategory(category));
-    }
+    };
     return (
         <div>
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-700 mb-4">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-700 mb-4">
                     Productos destacados
                 </h1>
-                <div className="flex gap-4">
+                <div className="gap-4 hidden md:flex">
                     {categories.map((category, index) => (
                         <button
                             key={index}
@@ -40,7 +40,7 @@ export default function Destacados() {
                     ))}
                 </div>
             </div>
-            <ul className="grid grid-cols-5 gap-x-8 gap-y-5 w-full">
+            <ul className="grid grid-cols-2 md:grid-cols-5 gap-x-8 gap-y-5 w-full">
                 {popularProducts.map((producto, index) => (
                     <li key={index} className="">
                         <ProductComponent producto={producto} />

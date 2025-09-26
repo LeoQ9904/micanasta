@@ -2,9 +2,12 @@ import Image from "next/image";
 import { cardFooter } from "../../../data/data";
 export default function NotasFooterComponent() {
     return (
-        <div className="w-full flex gap-2 justify-between px-4 my-15">
+        <div className="w-full flex flex-wrap md:flex-nowrap gap-2 justify-between px-4 my-15">
             {cardFooter.map((card, index) => (
-                <div key={index} className="flex items-center border border-gray-100 bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer">
+                <div
+                    key={index}
+                    className="flex w-full items-center border border-gray-100 bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                >
                     <Image
                         src={card.img}
                         alt={card.description}

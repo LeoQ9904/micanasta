@@ -25,7 +25,6 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-
     return (
         <html lang="en">
             <head>
@@ -46,7 +45,9 @@ export default function RootLayout({
             >
                 <StoreInitializer />
                 <HeaderComponent />
-                {children}
+                <div className="container mx-auto my-5 px-2 md:px-0">
+                    {children}
+                </div>
             </body>
             <FooterComponent />
         </html>

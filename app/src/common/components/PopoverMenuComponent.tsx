@@ -7,9 +7,13 @@ import { ExpandMoreOutlined } from "@mui/icons-material";
 export default function PopoverMenuComponent({
     Children,
     Title,
+    icon = null,
+    variant = "text",
 }: {
     Children: React.ReactNode;
     Title: string;
+    icon?: React.ReactNode;
+    variant?: "text" | "contained" | "outlined";
 }) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
@@ -30,9 +34,10 @@ export default function PopoverMenuComponent({
         <div>
             <Button
                 aria-describedby={id}
-                variant="text"
+                variant={variant}
                 onClick={handleClick}
                 endIcon={<ExpandMoreOutlined />}
+                startIcon={icon}
                 sx={{
                     textTransform: "none",
                     fontWeight: "700",

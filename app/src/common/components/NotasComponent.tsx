@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 export default function NotasComponent() {
     const cards = cardNotas;
     return (
-        <div className="flex gap-8">
+        <div className="flex flex-wrap md:flex-nowrap gap-8">
             {cards.map((card, index) => (
                 <Card
                     key={index}
