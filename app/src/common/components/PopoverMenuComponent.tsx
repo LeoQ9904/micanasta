@@ -61,7 +61,7 @@ export default function PopoverMenuComponent({
                     horizontal: "left",
                 }}
             >
-                <Typography sx={{ p: 2 }}>{Children}</Typography>
+                <div style={{ padding: '16px' }}>{Children}</div>
             </Popover>
         </div>
     );

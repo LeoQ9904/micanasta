@@ -21,7 +21,7 @@ export default function Quantity({
                 onChange={(e) =>
                     setQuantity(Math.max(1, parseInt(e.target.value) || 1))
                 }
-                className="w-16 text-center py-2 border-0 outline-none"
+                className="w-full md:w-16 text-center py-2 border-0 outline-none"
                 min="1"
             />
             <AddButton onClick={() => onIncrement()} />

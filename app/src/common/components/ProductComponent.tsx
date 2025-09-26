@@ -114,14 +114,14 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                 </a>
                             ))}
                         </div>
-                        <a className="font-bold text-lg text-gray-700 cursor-pointer hover:text-[var(--primary)] transition-colors duration-300">
+                        <a className="font-bold text-sm md:text-lg text-gray-700 cursor-pointer hover:text-[var(--primary)] transition-colors duration-300 line-clamp-2">
                             {producto.title}
                         </a>
                     </div>
-                    <div className="flex flex-wrap gap-2 justify-between items-center">
-                        <p className="text-[var(--primary)] text-xl font-bold">
+                    <div className="flex flex-col md:flex-row gap-2 justify-between items-start md:items-center">
+                        <p className="text-[var(--primary)] text-lg md:text-xl font-bold">
                             ${producto.price}&nbsp;
-                            <span className="line-through text-sm text-gray-400">
+                            <span className="line-through text-xs md:text-sm text-gray-400">
                                 $
                                 {calculateDiscountedPrice(
                                     producto.price,
@@ -131,7 +131,7 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                         </p>
                         <button
                             onClick={() => addItem(producto, 1)}
-                            className="flex gap-1 items-center py-1 px-2 rounded bg-[rgb(var(--primary-),.1)]  cursor-pointer hover:scale-[1.05] transition-transform duration-300 text-sm text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white justify-center flex-1"
+                            className="flex gap-1 items-center py-2 md:py-1 px-3 md:px-2 rounded bg-[rgb(var(--primary-),.1)] cursor-pointer hover:scale-[1.05] transition-transform duration-300 text-sm text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white justify-center w-full md:flex-1"
                         >
                             <CartComponent width={16} />
                             Agregar
@@ -151,14 +151,32 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                     </div>
                 )}
             </Card>
-            <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                maxWidth="md"
+                fullWidth
+                sx={{
+                    "& .MuiDialog-paper": {
+                        margin: { xs: "16px", md: "32px" },
+                        maxHeight: {
+                            xs: "calc(100% - 32px)",
+                            md: "calc(100% - 64px)",
+                        },
+                    },
+                }}
+            >
                 <DialogContent
-                    sx={{ minHeight: "500px", position: "relative" }}
+                    sx={{
+                        minHeight: { xs: "auto", md: "500px" },
+                        position: "relative",
+                        padding: { xs: "16px", md: "24px" },
+                    }}
                 >
                     <CloseButton onClick={handleClose} />
-                    <div className="flex gap-6">
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-6">
                         <div className="w-full">
-                            <div className="w-full flex items-center justify-center border border-gray-200 rounded-xl p-4 mb-4 relative">
+                            <div className="w-full flex items-center justify-center border border-gray-200 rounded-xl p-2 md:p-4 mb-4 relative">
                                 <ArrowLeft onClick={prevImage} />
                                 <img
                                     src={producto.images[selectedImage]}
@@ -167,13 +185,13 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                 />
                                 <ArrowRight onClick={nextImage} />
                             </div>
-                            <div className="flex gap-2 justify-center">
+                            <div className="flex gap-2 justify-center overflow-x-auto">
                                 {producto.images.map((image, index) => (
                                     <img
                                         key={index}
                                         src={image}
                                         alt={`${producto.title} ${index + 1}`}
-                                        className={`w-16 h-16 object-cover rounded cursor-pointer border-2 ${
+                                        className={`w-12 h-12 md:w-16 md:h-16 object-cover rounded cursor-pointer border-2 flex-shrink-0 ${
                                             selectedImage === index
                                                 ? "border-[var(--primary)]"
                                                 : "border-gray-200"
@@ -183,25 +201,25 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                 ))}
                             </div>
                         </div>
-                        <div className="w-full flex flex-col gap-10 justify-center">
+                        <div className="w-full flex flex-col gap-4 md:gap-10 justify-center">
                             {producto.discount > 0 && (
-                                <p className="text-xl text-yellow-500 font-bold">
+                                <p className="text-lg md:text-xl text-yellow-500 font-bold">
                                     !En oferta¡ - {producto.discount}% de
                                     descuento
                                 </p>
                             )}
-                            <a className="font-bold text-gray-700 cursor-pointer hover:text-[var(--primary)] transition-colors duration-300 text-4xl">
+                            <a className="font-bold text-gray-700 cursor-pointer hover:text-[var(--primary)] transition-colors duration-300 text-2xl md:text-4xl">
                                 {producto.title}
                             </a>
-                            <div className="flex gap-2 items-center font-bold">
-                                <p className="text-[var(--primary)] text-6xl">
+                            <div className="flex flex-col md:flex-row gap-2 items-start md:items-center font-bold">
+                                <p className="text-[var(--primary)] text-3xl md:text-6xl">
                                     ${producto.price}&nbsp;
                                 </p>
                                 <div className="flex flex-col">
-                                    <span className="text-xl text-yellow-500">
+                                    <span className="text-lg md:text-xl text-yellow-500">
                                         - {producto.discount}%
                                     </span>
-                                    <span className="line-through text-2xl text-gray-400">
+                                    <span className="line-through text-lg md:text-2xl text-gray-400">
                                         $
                                         {calculateDiscountedPrice(
                                             producto.price,
@@ -210,7 +228,7 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                     </span>
                                 </div>
                             </div>
-                            <div className="flex gap-4 items-center">
+                            <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
                                 <Quantity
                                     quantity={quantity}
                                     onIncrement={() =>
@@ -226,7 +244,7 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                         addItem(producto, quantity);
                                         handleClose();
                                     }}
-                                    className="flex gap-1 items-center py-2 px-4 rounded cursor-pointer hover:scale-[1.05] transition-transform duration-300 bg-[var(--primary)] text-white justify-center flex-1"
+                                    className="flex gap-1 items-center py-3 md:py-2 px-4 rounded cursor-pointer hover:scale-[1.05] transition-transform duration-300 bg-[var(--primary)] text-white justify-center flex-1"
                                 >
                                     <CartComponent width={16} />
                                     Agregar

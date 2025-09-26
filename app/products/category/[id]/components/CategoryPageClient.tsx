@@ -15,7 +15,8 @@ export default function CategoryPageClient({
     categoryId,
 }: CategoryPageClientProps) {
     const optionsList = [2, 5, 7];
-    const [optionSelected, setOptionSelected] = useState(2);
+    const [optionSelected, setOptionSelected] = useState(5);
+    const [mounted, setMounted] = useState(false);
     const {
         categories,
         filterProductsByCategory,
@@ -24,6 +25,10 @@ export default function CategoryPageClient({
     } = useProductStore();
     const category = categories.find((cat) => cat.id === categoryId);
     const [products, setProducts] = useState<IProduct[]>([]);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         fetchProducts();
@@ -53,7 +58,7 @@ export default function CategoryPageClient({
                     </div>
                 </div>
                 <div>
-                    <div className="w-full mb-4 border-b-3 border-gray-200 flex justify-start">
+                    <div className="hidden w-full mb-4 border-b-3 border-gray-200 md:flex justify-start">
                         <PopoverMenuComponent
                             icon={<BorderAllRounded fontSize="large" />}
                             variant="text"
@@ -77,7 +82,17 @@ export default function CategoryPageClient({
                             }
                         />
                     </div>
-                    <ul className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-4 md:gap-x-8 md:gap-y-5 w-full">
+                    <ul
+                        className={`grid gap-4 md:gap-x-8 md:gap-y-5 w-full ${
+                            !mounted
+                                ? "grid-cols-2 md:grid-cols-5"
+                                : optionSelected === 2
+                                  ? "grid-cols-2"
+                                  : optionSelected === 5
+                                    ? "grid-cols-2 md:grid-cols-5"
+                                    : "grid-cols-2 md:grid-cols-7"
+                        }`}
+                    >
                         {products.map((producto, index) => (
                             <li key={index} className="">
                                 <ProductComponent producto={producto} />

@@ -3,6 +3,7 @@ import Quantity from "@/app/src/common/components/utils/quantity";
 import { useCartStore } from "../../src/store/cartStore";
 import { calculateDiscountedPrice } from "@/app/src/common/hooks/useCalculateDiscounted";
 import { Button } from "@mui/material";
+import { ShoppingCart, WhatsApp } from "@mui/icons-material";
 
 export default function Cart() {
     const { items, getTotal, updateQuantity, removeItem } = useCartStore();
@@ -93,38 +94,44 @@ export default function Cart() {
                     >
                         Proceder al pago
                     </Button>
-                    <Button
-                        variant="outlined"
-                        className="h-9 md:h-10"
-                        sx={{
-                            fontSize: { xs: "0.9rem", md: "1.1rem" },
-                            fontWeight: "semibold",
-                            color: "var(--primary)",
-                            borderColor: "var(--primary)",
-                            "&:hover": {
-                                borderColor: "var(--primary)",
+                    <div className="flex gap-2">
+                        <Button
+                            variant="outlined"
+                            className="h-9 md:h-10 flex-1"
+                            sx={{
+                                fontSize: { xs: "0.9rem", md: "1.1rem" },
+                                fontWeight: "semibold",
                                 color: "var(--primary)",
-                            },
-                        }}
-                    >
-                        Ver canasta completa
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        className="h-9 md:h-10"
-                        sx={{
-                            fontSize: { xs: "0.9rem", md: "1.1rem" },
-                            fontWeight: "semibold",
-                            color: "var(--primary)",
-                            borderColor: "var(--primary)",
-                            "&:hover": {
                                 borderColor: "var(--primary)",
+                                minWidth: { xs: "auto", md: "120px" },
+                                "&:hover": {
+                                    borderColor: "var(--primary)",
+                                    color: "var(--primary)",
+                                },
+                            }}
+                        >
+                            <ShoppingCart className="block md:hidden" />
+                            <span className="hidden md:block">Ver canasta completa</span>
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            className="h-9 md:h-10 flex-1"
+                            sx={{
+                                fontSize: { xs: "0.9rem", md: "1.1rem" },
+                                fontWeight: "semibold",
                                 color: "var(--primary)",
-                            },
-                        }}
-                    >
-                        Comprar por WhatsApp
-                    </Button>
+                                borderColor: "var(--primary)",
+                                minWidth: { xs: "auto", md: "120px" },
+                                "&:hover": {
+                                    borderColor: "var(--primary)",
+                                    color: "var(--primary)",
+                                },
+                            }}
+                        >
+                            <WhatsApp className="block md:hidden" />
+                            <span className="hidden md:block">Comprar por WhatsApp</span>
+                        </Button>
+                    </div>
                 </div>
             )}
         </div>

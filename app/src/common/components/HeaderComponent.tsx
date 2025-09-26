@@ -89,11 +89,15 @@ export default function HeaderComponent() {
                             >
                                 <CartIcon />
                             </Badge>
-                            <a href="#" className="hidden md:block">Canasta</a>
+                            <a href="#" className="hidden md:block">
+                                Canasta
+                            </a>
                         </li>
                         <li className="flex gap-1 items-center cursor-pointer">
                             <UserIcon />
-                            <a href="#" className="hidden md:block">Iniciar sesión</a>
+                            <a href="#" className="hidden md:block">
+                                Iniciar sesión
+                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -182,7 +186,6 @@ export default function HeaderComponent() {
                                     },
                                     fontSize: "14px",
                                     minWidth: "auto",
-                                    padding: "4px 8px",
                                 }}
                             >
                                 Ofertas del día
@@ -200,7 +203,6 @@ export default function HeaderComponent() {
                                     },
                                     fontSize: "14px",
                                     minWidth: "auto",
-                                    padding: "4px 8px",
                                 }}
                             >
                                 Nuevos productos
