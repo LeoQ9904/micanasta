@@ -11,8 +11,8 @@ interface CategoriesSelectComponentProps {
     params: Promise<{ id: string }>;
 }
 
-export default async function CategoriesSelectComponent({ 
-    params 
+export default async function CategoriesSelectComponent({
+    params,
 }: CategoriesSelectComponentProps) {
     const { id } = await params;
     const categoryId = Number(id);

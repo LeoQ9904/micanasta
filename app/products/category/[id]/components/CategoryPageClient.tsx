@@ -11,7 +11,9 @@ interface CategoryPageClientProps {
     categoryId: number;
 }
 
-export default function CategoryPageClient({ categoryId }: CategoryPageClientProps) {
+export default function CategoryPageClient({
+    categoryId,
+}: CategoryPageClientProps) {
     const optionsList = [2, 5, 7];
     const [optionSelected, setOptionSelected] = useState(2);
     const {

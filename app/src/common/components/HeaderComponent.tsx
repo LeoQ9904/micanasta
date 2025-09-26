@@ -215,11 +215,11 @@ export default function HeaderComponent() {
                 onClose={() => useCartStore.getState().toggleCart()}
                 sx={{
                     "& .MuiDrawer-paper": {
-                        marginTop: "16px",
-                        marginRight: "16px",
-                        height: "calc(100vh - 10px)",
-                        borderRadius: "8px",
-                        width: "450px",
+                        marginTop: { xs: "0px", md: "16px" },
+                        marginRight: { xs: "0px", md: "16px" },
+                        height: { xs: "100vh", md: "calc(100vh - 10px)" },
+                        borderRadius: { xs: "0px", md: "8px" },
+                        width: { xs: "100vw", md: "450px" },
                     },
                 }}
             >

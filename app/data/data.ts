@@ -16,7 +16,7 @@ export const notions: INotions[] = [
         description: "Productos 100% Frescos",
     },
     {
-        description: "Envío gratis en compras mayores a $50.000 COP",
+        description: "Envío gratis",
     },
     {
         description: "Productos orgánicos certificados",

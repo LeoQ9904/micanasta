@@ -48,8 +48,8 @@ export default function RootLayout({
                 <div className="container mx-auto my-5 px-2 md:px-0">
                     {children}
                 </div>
+                <FooterComponent />
             </body>
-            <FooterComponent />
         </html>
     );
 }
