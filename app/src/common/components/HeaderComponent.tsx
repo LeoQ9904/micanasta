@@ -15,11 +15,18 @@ import CloseButton from "./utils/close";
 import { useCartStore } from "../../store/cartStore";
 import CategoriesListComponent from "./CatagoriesListComponent";
 import LoginModal from "./LoginModal";
+import UserDrawer from "./UserDrawer";
+import { useAuthStore } from "@/app/src/store/authStore";
+import { useAuthListener } from "@/app/src/lib/authListener";
+import { logout } from "@/app/src/lib/auth";
 export default function HeaderComponent() {
     const { scrollY } = useScroll();
+    useAuthListener();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loginModalOpen, setLoginModalOpen] = useState(false);
+    const [userDrawerOpen, setUserDrawerOpen] = useState(false);
+    const user = useAuthStore((state) => state.user);
 
     const totalItemsCart = useCartStore((state) =>
         state.items.reduce((acc, item) => acc + item.quantity, 0)
@@ -97,11 +104,17 @@ export default function HeaderComponent() {
                         </li>
                         <li
                             className="flex gap-1 items-center cursor-pointer"
-                            onClick={() => setLoginModalOpen(true)}
+                            onClick={() => {
+                                if (user) {
+                                    setUserDrawerOpen(true);
+                                } else {
+                                    setLoginModalOpen(true);
+                                }
+                            }}
                         >
                             <UserIcon />
                             <a href="#" className="hidden md:block">
-                                Iniciar sesión
+                                {user ? "Mi Perfil" : "Iniciar sesión"}
                             </a>
                         </li>
                     </ul>
@@ -238,6 +251,10 @@ export default function HeaderComponent() {
             <LoginModal
                 open={loginModalOpen}
                 onClose={() => setLoginModalOpen(false)}
+            />
+            <UserDrawer
+                open={userDrawerOpen}
+                onClose={() => setUserDrawerOpen(false)}
             />
         </>
     );

@@ -10,6 +10,7 @@ import {
     IconButton,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { resetPassword } from "@/app/src/lib/auth";
 
 interface ForgotPasswordModalProps {
     open: boolean;
@@ -22,10 +23,14 @@ export default function ForgotPasswordModal({
 }: ForgotPasswordModalProps) {
     const [email, setEmail] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Reset password for:", email);
-        onClose();
+        try {
+            await resetPassword(email);
+            onClose();
+        } catch (error) {
+            console.error("Reset password error:", error);
+        }
     };
 
     return (

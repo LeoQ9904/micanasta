@@ -12,6 +12,11 @@ import {
 import { Close } from "@mui/icons-material";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import GoogleIcon from "./utils/icons/google";
+import {
+    loginWithEmail,
+    registerWithEmail,
+    loginWithGoogle,
+} from "@/app/src/lib/auth";
 
 interface LoginModalProps {
     open: boolean;
@@ -24,21 +29,45 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
     const [isRegister, setIsRegister] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (isRegister) {
-            console.log("Register:", { email, password, confirmPassword });
-        } else {
-            console.log("Login:", { email, password });
+        setError("");
+        try {
+            if (isRegister) {
+                await registerWithEmail(email, password);
+            } else {
+                await loginWithEmail(email, password);
+            }
+            onClose();
+        } catch (error: any) {
+            if (
+                error.code === "auth/invalid-login-credentials" ||
+                error.code === "auth/invalid-credential"
+            ) {
+                setError(
+                    "Credenciales inválidas. Verifica tu email y contraseña."
+                );
+            } else if (error.code === "auth/user-not-found") {
+                setError("No existe una cuenta con este email.");
+            } else if (error.code === "auth/wrong-password") {
+                setError("Contraseña incorrecta.");
+            } else if (error.code === "auth/email-already-in-use") {
+                setError("Ya existe una cuenta con este email.");
+            } else {
+                setError("Error de autenticación. Inténtalo de nuevo.");
+            }
         }
-        onClose();
     };
 
-    const handleGoogleLogin = () => {
-        // Aquí iría la lógica de Google OAuth
-        console.log("Google Login");
-        onClose();
+    const handleGoogleLogin = async () => {
+        try {
+            await loginWithGoogle();
+            onClose();
+        } catch (error) {
+            console.error("Google login error:", error);
+        }
     };
 
     return (
@@ -153,6 +182,15 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                                 margin="normal"
                                 required
                             />
+                        )}
+                        {error && (
+                            <Typography
+                                color="error"
+                                variant="body2"
+                                sx={{ mb: 2, textAlign: "center" }}
+                            >
+                                {error}
+                            </Typography>
                         )}
                         <Button
                             type="submit"
