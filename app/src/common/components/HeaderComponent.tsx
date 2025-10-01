@@ -14,10 +14,12 @@ import { notions } from "@/app/data/data";
 import CloseButton from "./utils/close";
 import { useCartStore } from "../../store/cartStore";
 import CategoriesListComponent from "./CatagoriesListComponent";
+import LoginModal from "./LoginModal";
 export default function HeaderComponent() {
     const { scrollY } = useScroll();
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [loginModalOpen, setLoginModalOpen] = useState(false);
 
     const totalItemsCart = useCartStore((state) =>
         state.items.reduce((acc, item) => acc + item.quantity, 0)
@@ -93,7 +95,10 @@ export default function HeaderComponent() {
                                 Canasta
                             </a>
                         </li>
-                        <li className="flex gap-1 items-center cursor-pointer">
+                        <li
+                            className="flex gap-1 items-center cursor-pointer"
+                            onClick={() => setLoginModalOpen(true)}
+                        >
                             <UserIcon />
                             <a href="#" className="hidden md:block">
                                 Iniciar sesión
@@ -230,6 +235,10 @@ export default function HeaderComponent() {
                 />
                 <Cart />
             </Drawer>
+            <LoginModal
+                open={loginModalOpen}
+                onClose={() => setLoginModalOpen(false)}
+            />
         </>
     );
 }
