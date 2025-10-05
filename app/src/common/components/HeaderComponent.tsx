@@ -8,7 +8,6 @@ import CartIcon from "../../assets/icons/cart";
 import UserIcon from "../../assets/icons/user";
 import ContactIcon from "../../assets/icons/contact";
 import { useScroll } from "../hooks/useScroll";
-import { categories } from "@/app/data/data";
 import Cart from "@/app/cart/components/cart";
 import { notions } from "@/app/data/data";
 import CloseButton from "./utils/close";
@@ -18,19 +17,34 @@ import LoginModal from "./LoginModal";
 import UserDrawer from "./UserDrawer";
 import { useAuthStore } from "@/app/src/store/authStore";
 import { useAuthListener } from "@/app/src/lib/authListener";
-import { logout } from "@/app/src/lib/auth";
+import { useProductStore } from "@/app/src/store/productStore";
+import { useRouter } from "next/navigation";
+
 export default function HeaderComponent() {
     const { scrollY } = useScroll();
+    const router = useRouter();
     useAuthListener();
+
+    const categories = useProductStore((state) => state.categories);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loginModalOpen, setLoginModalOpen] = useState(false);
     const [userDrawerOpen, setUserDrawerOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("Todas");
     const user = useAuthStore((state) => state.user);
 
     const totalItemsCart = useCartStore((state) =>
         state.items.reduce((acc, item) => acc + item.quantity, 0)
     );
+
+    const handleSearch = () => {
+        if (searchTerm.trim()) {
+            router.push(
+                `/products/?category=${selectedCategory}&search=${encodeURIComponent(searchTerm)}`
+            );
+        }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -63,9 +77,13 @@ export default function HeaderComponent() {
                     onClick={() => (window.location.href = "/")}
                 />
                 <div className="hidden md:flex gap-4 divide-x-1 divide-gray-300 items-center border-2 border-[var(--border-color)] rounded-md ml-8 px-2 py-1 w-1/2">
-                    <select className="px-3 py-2 bg-transparent outline-none font-bold cursor-pointer">
+                    <select
+                        className="px-3 py-2 bg-transparent outline-none font-bold cursor-pointer"
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
                         {categories.map((category) => (
-                            <option key={category.id} value={category.name}>
+                            <option key={category._id} value={category.name}>
                                 {category.name}
                             </option>
                         ))}
@@ -75,9 +93,14 @@ export default function HeaderComponent() {
                             type="text"
                             className="w-full px-4 py-2 outline-none bg-transparent"
                             placeholder="Buscar productos"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyPress={(e) =>
+                                e.key === "Enter" && handleSearch()
+                            }
                         />
-                        <IconButton className="">
-                            <Search className="" />
+                        <IconButton onClick={handleSearch}>
+                            <Search />
                         </IconButton>
                     </div>
                 </div>
@@ -141,6 +164,24 @@ export default function HeaderComponent() {
                                     },
                                     fontSize: "16px",
                                 }}
+                                onClick={() => router.push(`/`)}
+                            >
+                                Inicio
+                            </Button>
+                        </li>
+                        <li className="">
+                            <Button
+                                sx={{
+                                    textTransform: "none",
+                                    fontWeight: "700",
+                                    color: "#4b5563",
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                        color: "var(--primary)",
+                                    },
+                                    fontSize: "16px",
+                                }}
+                                onClick={() => router.push(`/products/ofertas`)}
                             >
                                 Ofertas del día
                             </Button>
@@ -157,6 +198,7 @@ export default function HeaderComponent() {
                                     },
                                     fontSize: "16px",
                                 }}
+                                onClick={() => router.push(`/products/news`)}
                             >
                                 Nuevos productos
                             </Button>
@@ -179,8 +221,11 @@ export default function HeaderComponent() {
                         type="text"
                         className="w-full px-2 py-1 outline-none bg-transparent text-sm"
                         placeholder="Buscar productos"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                     />
-                    <IconButton size="small">
+                    <IconButton size="small" onClick={handleSearch}>
                         <Search />
                     </IconButton>
                 </div>

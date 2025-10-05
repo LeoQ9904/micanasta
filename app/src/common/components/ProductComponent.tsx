@@ -17,12 +17,15 @@ import ArrowLeft from "./utils/arrowLeft";
 import ArrowRight from "./utils/arrowRight";
 import Quantity from "./utils/quantity";
 import { calculateDiscountedPrice } from "../hooks/useCalculateDiscounted";
+import { useCurrencyFormat } from "@/app/src/hooks/useCurrencyFormat";
 
 interface ProductoComponentProps {
     producto: IProduct;
 }
 
 export default function ProductComponent({ producto }: ProductoComponentProps) {
+    const formatCurrency = useCurrencyFormat({ currency: "COP" });
+
     const [focused, setFocused] = useState(false);
     const [open, setOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
@@ -57,6 +60,7 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
                         transition: "box-shadow 0.3s ease-in-out",
                     },
+                    height: "100%",
                 }}
                 onMouseEnter={() => {
                     setFocused(true);
@@ -72,62 +76,77 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                     setHoverImageIndex(0);
                 }}
             >
-                <CardHeader
-                    title={`- ${producto.discount}%`}
-                    sx={{
-                        color: "white",
-                        bgcolor: "rgb(206, 55, 58)",
-                        borderRadius: "16px 0",
-                        width: "fit-content",
-                        p: "0.25rem 0.75rem",
-                        position: "absolute",
-                        zIndex: 1,
-                        "& .MuiCardHeader-title": {
-                            fontSize: "0.875rem",
-                            fontWeight: "normal",
-                        },
-                    }}
-                />
+                {producto.discount > 0 && (
+                    <CardHeader
+                        title={`- ${producto.discount}%`}
+                        sx={{
+                            color: "white",
+                            bgcolor: "rgb(206, 55, 58)",
+                            borderRadius: "16px 0",
+                            width: "fit-content",
+                            p: "0.25rem 0.75rem",
+                            position: "absolute",
+                            zIndex: 1,
+                            "& .MuiCardHeader-title": {
+                                fontSize: "0.875rem",
+                                fontWeight: "normal",
+                            },
+                        }}
+                    />
+                )}
                 <CardMedia
                     component="img"
-                    height=""
                     alt="Product Image"
                     image={
                         focused
                             ? producto.images[hoverImageIndex]
-                            : producto.image
+                            : producto.imageUrl
                     }
                     className="cursor-pointer"
-                ></CardMedia>
+                    sx={{ maxHeight: 250, objectFit: "cover" }}
+                />
                 <CardContent className="flex flex-col gap-3">
                     <div>
                         <div className="text-xs text-gray-500">
-                            {producto.categories.map((categoria, index) => (
-                                <a
-                                    key={index}
-                                    className="cursor-pointer"
-                                    href="#"
-                                >
-                                    {categoria.name}
-                                    {index < producto.categories.length - 1 &&
-                                        ", "}
-                                </a>
-                            ))}
+                            <div className="text-xs text-gray-500">
+                                {Array.isArray(producto.tags) &&
+                                    producto.tags!.map((tag, index) => (
+                                        <span key={index}>
+                                            <a
+                                                className="cursor-pointer"
+                                                href="#"
+                                            >
+                                                {tag}
+                                            </a>
+                                            {index <
+                                                producto.tags!.length - 1 &&
+                                                ", "}
+                                        </span>
+                                    ))}
+                            </div>
                         </div>
                         <a className="font-bold text-sm md:text-lg text-gray-700 cursor-pointer hover:text-[var(--primary)] transition-colors duration-300 line-clamp-2">
-                            {producto.title}
+                            {producto.name}
                         </a>
                     </div>
                     <div className="flex flex-col md:flex-row gap-2 justify-between items-start md:items-center">
                         <p className="text-[var(--primary)] text-lg md:text-xl font-bold">
-                            ${producto.price}&nbsp;
-                            <span className="line-through text-xs md:text-sm text-gray-400">
-                                $
-                                {calculateDiscountedPrice(
-                                    producto.price,
-                                    producto.discount
-                                )}
+                            {formatCurrency(producto.price)}
+                            <span className="text-sm text-gray-500">
+                                {" "}
+                                x {producto.unit}{" "}
                             </span>
+                            &nbsp;
+                            {producto.discount > 0 && (
+                                <span className="line-through text-xs md:text-sm text-gray-400">
+                                    {formatCurrency(
+                                        calculateDiscountedPrice(
+                                            producto.price,
+                                            producto.discount
+                                        )
+                                    )}
+                                </span>
+                            )}
                         </p>
                         <button
                             onClick={() => addItem(producto, 1)}
@@ -180,7 +199,7 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                 <ArrowLeft onClick={prevImage} />
                                 <img
                                     src={producto.images[selectedImage]}
-                                    alt={producto.title}
+                                    alt={producto.name}
                                     className="max-w-full max-h-full"
                                 />
                                 <ArrowRight onClick={nextImage} />
@@ -190,7 +209,7 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                     <img
                                         key={index}
                                         src={image}
-                                        alt={`${producto.title} ${index + 1}`}
+                                        alt={`${producto.name} ${index + 1}`}
                                         className={`w-12 h-12 md:w-16 md:h-16 object-cover rounded cursor-pointer border-2 flex-shrink-0 ${
                                             selectedImage === index
                                                 ? "border-[var(--primary)]"
@@ -209,24 +228,32 @@ export default function ProductComponent({ producto }: ProductoComponentProps) {
                                 </p>
                             )}
                             <a className="font-bold text-gray-700 cursor-pointer hover:text-[var(--primary)] transition-colors duration-300 text-2xl md:text-4xl">
-                                {producto.title}
+                                {producto.name}
                             </a>
                             <div className="flex flex-col md:flex-row gap-2 items-start md:items-center font-bold">
                                 <p className="text-[var(--primary)] text-3xl md:text-6xl">
-                                    ${producto.price}&nbsp;
+                                    {formatCurrency(producto.price)}
+                                    <span className="text-xl text-gray-400">
+                                        {" "}
+                                        x {producto.unit}
+                                    </span>
+                                    &nbsp;
                                 </p>
-                                <div className="flex flex-col">
-                                    <span className="text-lg md:text-xl text-yellow-500">
-                                        - {producto.discount}%
-                                    </span>
-                                    <span className="line-through text-lg md:text-2xl text-gray-400">
-                                        $
-                                        {calculateDiscountedPrice(
-                                            producto.price,
-                                            producto.discount
-                                        )}
-                                    </span>
-                                </div>
+                                {producto.discount > 0 && (
+                                    <div className="flex flex-col">
+                                        <span className="text-lg md:text-xl text-yellow-500">
+                                            - {producto.discount}%
+                                        </span>
+                                        <span className="line-through text-lg md:text-2xl text-gray-400">
+                                            {formatCurrency(
+                                                calculateDiscountedPrice(
+                                                    producto.price,
+                                                    producto.discount
+                                                )
+                                            )}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
                                 <Quantity

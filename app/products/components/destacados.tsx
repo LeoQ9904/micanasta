@@ -1,14 +1,13 @@
 "use client";
 import ProductComponent from "@/app/src/common/components/ProductComponent";
-import { categories } from "@/app/data/data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProductStore } from "../../src/store/productStore";
+import { ICategory } from "@/app/src/interfaces/product/Category";
 
 export default function Destacados() {
-    const { fetchPopularProducts, filterPopularProductsByCategory } =
-        useProductStore();
+    const { filterPopularProductsByCategory } = useProductStore();
     const [categorySelect, setCategorySelect] = useState("Todas");
-    fetchPopularProducts();
+    const [categories, setCategories] = useState<ICategory[]>([]);
     const [popularProducts, setPopularProducts] = useState(
         filterPopularProductsByCategory(categorySelect)
     );
@@ -17,6 +16,24 @@ export default function Destacados() {
         setCategorySelect(category);
         setPopularProducts(filterPopularProductsByCategory(category));
     };
+
+    useEffect(() => {
+        const uniqueCategoryNames = Array.from(
+            new Set(popularProducts.map((product) => product.category))
+        );
+        const categoriesList: ICategory[] = [
+            { id: 0, name: "Todas" },
+            ...uniqueCategoryNames.map((categoryName, index) => {
+                return {
+                    id: index + 1,
+                    name: categoryName,
+                };
+            }),
+        ];
+        if (categories.length == 0) {
+            setCategories(categoriesList);
+        }
+    }, [popularProducts, categories]);
     return (
         <div>
             <div className="flex justify-between items-center">
@@ -24,23 +41,24 @@ export default function Destacados() {
                     Productos destacados
                 </h1>
                 <div className="gap-4 hidden md:flex">
-                    {categories.map((category, index) => (
-                        <button
-                            key={index}
-                            className={
-                                "font-bold hover:text-[var(--primary)] cursor-pointer transition-all duration-300 hover:-translate-y-1 " +
-                                (categorySelect === category.name
-                                    ? " text-[var(--primary)]"
-                                    : "text-gray-600")
-                            }
-                            onClick={() => selectCategory(category.name)}
-                        >
-                            {category.name}
-                        </button>
-                    ))}
+                    {categories.length > 0 &&
+                        categories.map((category, index) => (
+                            <button
+                                key={index}
+                                className={
+                                    "font-bold hover:text-[var(--primary)] cursor-pointer transition-all duration-300 hover:-translate-y-1 " +
+                                    (categorySelect === category.name
+                                        ? " text-[var(--primary)]"
+                                        : "text-gray-600")
+                                }
+                                onClick={() => selectCategory(category.name)}
+                            >
+                                {category.name}
+                            </button>
+                        ))}
                 </div>
             </div>
-            <ul className="grid grid-cols-2 md:grid-cols-5 gap-x-8 gap-y-5 w-full">
+            <ul className="grid grid-cols-2 md:grid-cols-5 gap-x-8 gap-y-5 w-full items-stretch">
                 {popularProducts.map((producto, index) => (
                     <li key={index} className="">
                         <ProductComponent producto={producto} />

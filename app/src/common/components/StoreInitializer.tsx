@@ -1,15 +1,7 @@
 "use client";
-import { useEffect } from "react";
-import { useProductStore } from "../../store/productStore";
+import { useCategories } from "../../hooks/useCategories.hook";
 
 export default function StoreInitializer() {
-    const { fetchCategories, fetchProducts, fetchPopularProducts } = useProductStore();
-
-    useEffect(() => {
-        fetchCategories();
-        fetchProducts();
-        fetchPopularProducts();
-    }, [fetchCategories, fetchProducts, fetchPopularProducts]);
-
+    useCategories();
     return null;
 }

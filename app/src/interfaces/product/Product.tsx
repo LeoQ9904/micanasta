@@ -1,12 +1,12 @@
-import { ICategory } from "./Category";
-
 export interface IProduct {
-    title: string;
+    name: string;
     description: string;
-    image: string;
+    imageUrl: string;
     price: number;
     discount: number;
     images: string[];
-    categories: ICategory[];
+    category: string;
+    tags?: string[];
     popular: boolean;
+    unit: string;
 }

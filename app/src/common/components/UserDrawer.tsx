@@ -8,7 +8,7 @@ import {
     Button,
     Divider,
 } from "@mui/material";
-import { Close, ExitToApp, Person, Email } from "@mui/icons-material";
+import { Close, ExitToApp, Email } from "@mui/icons-material";
 import { useAuthStore } from "@/app/src/store/authStore";
 import { logout } from "@/app/src/lib/auth";
 import { sendEmailVerification } from "firebase/auth";

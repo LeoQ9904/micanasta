@@ -4,6 +4,7 @@ import "./globals.css";
 import HeaderComponent from "./src/common/components/HeaderComponent";
 import { FooterComponent } from "./src/common/components/FooterComponent";
 import StoreInitializer from "./src/common/components/StoreInitializer";
+import QueryProvider from "./src/providers/QueryProvider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -43,12 +44,14 @@ export default function RootLayout({
                 className="antialiased"
                 style={{ fontFamily: "Nunito, sans-serif" }}
             >
-                <StoreInitializer />
-                <HeaderComponent />
-                <div className="container mx-auto my-5 px-2 md:px-0">
-                    {children}
-                </div>
-                <FooterComponent />
+                <QueryProvider>
+                    <StoreInitializer />
+                    <HeaderComponent />
+                    <div className="container mx-auto my-5 px-2 md:px-0">
+                        {children}
+                    </div>
+                    <FooterComponent />
+                </QueryProvider>
             </body>
         </html>
     );

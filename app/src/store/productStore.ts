@@ -8,9 +8,9 @@ export interface ProductStore {
     products: IProduct[];
     popularProducts: IProduct[];
     categories: ICategory[];
-    fetchProducts: () => void;
-    fetchPopularProducts: () => void;
-    fetchCategories: () => void;
+    setProductos: (products: IProduct[]) => void;
+    setPopularProducts: (popularProducts: IProduct[]) => void;
+    setCategories: (category: ICategory[]) => void;
     filterPopularProductsByCategory: (category: string) => IProduct[];
     filterProductsByCategory: (category: string) => IProduct[];
 }
@@ -19,37 +19,23 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     products: [],
     popularProducts: [],
     categories: [],
-    fetchProducts: () =>
-        set((state) => {
-            if (state.products.length === 0) {
-                return { products: productos };
-            }
-            return state;
-        }),
-    fetchPopularProducts: () =>
-        set((state) => {
-            if (state.popularProducts.length === 0) {
-                const popularProducts = productos.filter(
-                    (product) => product.popular
-                );
-                return { popularProducts };
-            }
-            return state;
-        }),
+    setProductos: (products) => set({ products }),
+    setPopularProducts: (popularProducts) => set({ popularProducts }),
+    setCategories: (categories) => set({ categories }),
     filterPopularProductsByCategory: (category: string) => {
         if (category === "Todas") {
             return get().popularProducts;
         }
-        return get().popularProducts.filter((product) =>
-            product.categories.some((cat) => cat.name === category)
+        return get().popularProducts.filter(
+            (product) => product.category === category
         );
     },
     filterProductsByCategory: (category: string) => {
         if (category === "Todas") {
             return get().products;
         }
-        return get().products.filter((product) =>
-            product.categories.some((cat) => cat.name === category)
+        return get().products.filter(
+            (product) => product.category === category
         );
     },
     fetchCategories: () =>
