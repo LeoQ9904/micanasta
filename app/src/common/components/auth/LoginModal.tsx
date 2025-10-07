@@ -10,20 +10,42 @@ import {
     IconButton,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import ForgotPasswordModal from "./ForgotPasswordModal";
-import GoogleIcon from "./utils/icons/google";
+import ForgotPasswordModal from "../ForgotPasswordModal";
+import GoogleIcon from "../utils/icons/google";
 import {
     loginWithEmail,
     registerWithEmail,
     loginWithGoogle,
 } from "@/app/src/lib/auth";
+import { useAuthStore } from "@/app/src/store/authStore";
 
 interface LoginModalProps {
     open: boolean;
     onClose: () => void;
 }
 
+const errors: { key: string; val: string }[] = [
+    {
+        key: "auth/invalid-login-credentials",
+        val: "Credenciales inválidas. Verifica tu email y contraseña.",
+    },
+    {
+        key: "auth/invalid-credential",
+        val: "Credenciales inválidas. Verifica tu email y contraseña.",
+    },
+    { key: "auth/user-not-found", val: "No existe una cuenta con este email." },
+    { key: "auth/wrong-password", val: "Contraseña incorrecta." },
+    {
+        key: "auth/email-already-in-use",
+        val: "Ya existe una cuenta con este email.",
+    },
+];
+
 export default function LoginModal({ open, onClose }: LoginModalProps) {
+    // Stores
+    const { setCustomer } = useAuthStore();
+
+    // Reactivas
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isRegister, setIsRegister] = useState(false);
@@ -36,34 +58,23 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
         setError("");
         try {
             if (isRegister) {
-                await registerWithEmail(email, password);
+                const data = await registerWithEmail(email, password);
+                setCustomer(data);
             } else {
-                await loginWithEmail(email, password);
+                const data = await loginWithEmail(email, password);
+                setCustomer(data);
             }
             onClose();
         } catch (error: any) {
-            if (
-                error.code === "auth/invalid-login-credentials" ||
-                error.code === "auth/invalid-credential"
-            ) {
-                setError(
-                    "Credenciales inválidas. Verifica tu email y contraseña."
-                );
-            } else if (error.code === "auth/user-not-found") {
-                setError("No existe una cuenta con este email.");
-            } else if (error.code === "auth/wrong-password") {
-                setError("Contraseña incorrecta.");
-            } else if (error.code === "auth/email-already-in-use") {
-                setError("Ya existe una cuenta con este email.");
-            } else {
-                setError("Error de autenticación. Inténtalo de nuevo.");
-            }
+            const err = errors.find((er) => er.key == error.code);
+            setError(err?.val ?? "Error de autenticación. Inténtalo de nuevo.");
         }
     };
 
     const handleGoogleLogin = async () => {
         try {
-            await loginWithGoogle();
+            const data = await loginWithGoogle();
+            setCustomer(data);
             onClose();
         } catch (error) {
             console.error("Google login error:", error);

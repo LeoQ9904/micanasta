@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "../interfaces/users/User";
+import { Customer } from "../interfaces/users/Customer";
 import {
     registerUser,
     getCurrentUser,
@@ -23,7 +24,15 @@ export const useUsers = () => {
     });
 
     const updateProfileMutation = useMutation({
-        mutationFn: updateProfile,
+        mutationFn: ({
+            userData,
+            uid,
+            file,
+        }: {
+            userData: Partial<Customer>;
+            uid: string;
+            file?: File;
+        }) => updateProfile(userData, uid, file),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["currentUser"] });
         },
@@ -47,5 +56,7 @@ export const useUsers = () => {
         isRegistering: registerMutation.isPending,
         isUpdating: updateProfileMutation.isPending,
         isChangingPassword: changePasswordMutation.isPending,
+        updateProfileError: updateProfileMutation.error,
+        updateProfileSuccess: updateProfileMutation.isSuccess,
     };
 };
