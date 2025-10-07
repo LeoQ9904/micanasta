@@ -173,8 +173,8 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                                     📞 {customer.phoneNumber}
                                 </Typography>
                             )}
-                            {customer.address &&
-                                customer.address.length > 0 && (
+                            {customer.addresses &&
+                                customer.addresses.length > 0 && (
                                     <Box
                                         sx={{
                                             display: "flex",
@@ -191,12 +191,13 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                                             variant="body2"
                                             color="text.secondary"
                                         >
-                                            {customer.address.length} dirección
-                                            {customer.address.length !== 1
+                                            {customer.addresses.length}{" "}
+                                            dirección
+                                            {customer.addresses.length !== 1
                                                 ? "es"
                                                 : ""}{" "}
                                             guardada
-                                            {customer.address.length !== 1
+                                            {customer.addresses.length !== 1
                                                 ? "s"
                                                 : ""}
                                         </Typography>
@@ -240,10 +241,15 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                             onClick={handleGoToProfile}
                             sx={{
                                 mb: 2,
-                                backgroundColor: "var(--primary)",
+                                backgroundColor: "#f5f5f5",
+                                color: "text.primary",
+                                py: 1.2,
+                                textTransform: "none",
+                                fontWeight: 500,
+                                boxShadow: "none",
                                 "&:hover": {
-                                    backgroundColor: "var(--primary)",
-                                    opacity: 0.9,
+                                    backgroundColor: "#eeeeee",
+                                    boxShadow: "none",
                                 },
                             }}
                         >
@@ -272,15 +278,17 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
 
                         <Button
                             fullWidth
-                            variant="outlined"
+                            variant="text"
                             startIcon={<ExitToApp />}
                             onClick={handleLogout}
                             sx={{
-                                color: "error.main",
-                                borderColor: "error.main",
+                                color: "#666",
+                                py: 1.2,
+                                textTransform: "none",
+                                fontWeight: 500,
                                 "&:hover": {
-                                    backgroundColor: "error.light",
-                                    borderColor: "error.main",
+                                    backgroundColor: "#f5f5f5",
+                                    color: "#d32f2f",
                                 },
                             }}
                         >

@@ -116,7 +116,7 @@ export default function Cart() {
                             "&:hover": { backgroundColor: "var(--primary)" },
                         }}
                     >
-                        Proceder al pago
+                        Confirmar pedido
                     </Button>
                     <div className="flex gap-2">
                         <Button
