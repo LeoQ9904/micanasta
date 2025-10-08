@@ -1,6 +1,6 @@
 "use client";
 import { useFindProductDiscounted } from "@/app/src/hook/useProducts.hook";
-import Layout from "../components/layout";
+import Layout from "../components/ProductsLayout";
 
 export default function OfertasPage() {
     const { data, isLoading, error } = useFindProductDiscounted();

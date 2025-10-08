@@ -1,7 +1,6 @@
 "use client";
 import { create } from "zustand";
 import { IProduct } from "../interfaces/product/Product";
-import { productos, categories } from "@/app/data/data";
 import { ICategory } from "../interfaces/product/Category";
 
 export interface ProductStore {
@@ -38,11 +37,4 @@ export const useProductStore = create<ProductStore>((set, get) => ({
             (product) => product.category === category
         );
     },
-    fetchCategories: () =>
-        set((state) => {
-            if (state.categories.length === 0) {
-                return { categories };
-            }
-            return state;
-        }),
 }));

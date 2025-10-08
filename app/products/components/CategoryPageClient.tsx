@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { IProduct } from "@/app/src/interfaces/product/Product";
 import { useFindProductByCategory } from "@/app/src/hook/useProducts.hook";
-import Layout from "./layout";
+import Layout from "./ProductsLayout";
 
 interface CategoryPageClientProps {
     categoryId: string;

@@ -22,11 +22,20 @@ export default function Destacados() {
             new Set(popularProducts.map((product) => product.category))
         );
         const categoriesList: ICategory[] = [
-            { id: 0, name: "Todas" },
+            {
+                _id: "0",
+                name: "Todas",
+                description: "Todas las categorías",
+                isActive: true,
+                parentId: null,
+            },
             ...uniqueCategoryNames.map((categoryName, index) => {
                 return {
-                    id: index + 1,
+                    _id: index + (1).toString(),
                     name: categoryName,
+                    description: categoryName,
+                    isActive: true,
+                    parentId: null,
                 };
             }),
         ];

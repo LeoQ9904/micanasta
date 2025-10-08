@@ -1,6 +1,6 @@
 "use client";
 import { useFindProductsNews } from "@/app/src/hook/useProducts.hook";
-import Layout from "../components/layout";
+import Layout from "../components/ProductsLayout";
 
 export default function Page() {
     const { data, isLoading, error } = useFindProductsNews();
