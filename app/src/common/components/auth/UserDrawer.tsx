@@ -17,6 +17,7 @@ import {
     Edit,
     Settings,
     LocationOn,
+    Receipt,
 } from "@mui/icons-material";
 import { useAuthStore } from "@/app/src/store/authStore";
 import { logout } from "@/app/src/lib/auth";
@@ -76,6 +77,11 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
     const handleGoToProfile = () => {
         onClose();
         router.push("/profile");
+    };
+
+    const handleGoToOrders = () => {
+        onClose();
+        router.push("/orders");
     };
 
     return (
@@ -254,6 +260,28 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                             }}
                         >
                             Gestionar Perfil
+                        </Button>
+
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            startIcon={<Receipt />}
+                            onClick={handleGoToOrders}
+                            sx={{
+                                mb: 2,
+                                backgroundColor: "#f5f5f5",
+                                color: "text.primary",
+                                py: 1.2,
+                                textTransform: "none",
+                                fontWeight: 500,
+                                boxShadow: "none",
+                                "&:hover": {
+                                    backgroundColor: "#eeeeee",
+                                    boxShadow: "none",
+                                },
+                            }}
+                        >
+                            Mis Pedidos
                         </Button>
 
                         {!user.emailVerified && (

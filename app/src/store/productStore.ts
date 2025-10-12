@@ -1,17 +1,17 @@
 "use client";
 import { create } from "zustand";
-import { IProduct } from "../interfaces/product/Product";
+import { Product } from "../interfaces/product/Product";
 import { ICategory } from "../interfaces/product/Category";
 
 export interface ProductStore {
-    products: IProduct[];
-    popularProducts: IProduct[];
+    products: Product[];
+    popularProducts: Product[];
     categories: ICategory[];
-    setProductos: (products: IProduct[]) => void;
-    setPopularProducts: (popularProducts: IProduct[]) => void;
+    setProductos: (products: Product[]) => void;
+    setPopularProducts: (popularProducts: Product[]) => void;
     setCategories: (category: ICategory[]) => void;
-    filterPopularProductsByCategory: (category: string) => IProduct[];
-    filterProductsByCategory: (category: string) => IProduct[];
+    filterPopularProductsByCategory: (category: string) => Product[];
+    filterProductsByCategory: (category: string) => Product[];
 }
 
 export const useProductStore = create<ProductStore>((set, get) => ({

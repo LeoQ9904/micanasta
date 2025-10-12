@@ -1,6 +1,6 @@
 "use client";
 import ProductComponent from "@/app/src/common/components/ProductComponent";
-import { useFindProductDiscounted } from "@/app/src/hook/useProducts.hook";
+import { useFindProductDiscounted } from "@/app/src/hooks/useProducts.hook";
 import { IconButton } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useRef } from "react";

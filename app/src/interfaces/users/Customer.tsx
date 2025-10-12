@@ -8,6 +8,7 @@ export interface Address {
 }
 
 export interface Customer {
+    _id: string;
     firebaseUid: string;
     email: string;
     displayName: string;

@@ -1,33 +1,33 @@
-import { IProduct } from "../interfaces/product/Product";
+import { Product } from "../interfaces/product/Product";
 import { api } from "./apiClient";
 
-export async function getProducts(): Promise<IProduct[]> {
-    const response = await api.get<IProduct[]>("/products");
+export async function getProducts(): Promise<Product[]> {
+    const response = await api.get<Product[]>("/products");
     return response.data;
 }
 
-export async function getProductPopular(): Promise<IProduct[]> {
-    const response = await api.get<IProduct[]>("/products/popular");
+export async function getProductPopular(): Promise<Product[]> {
+    const response = await api.get<Product[]>("/products/popular");
     return response.data;
 }
 
 export async function getProductByCategory(
     category: string,
     searchTerm?: string
-): Promise<IProduct[]> {
+): Promise<Product[]> {
     const url = searchTerm
         ? `/products/category/${category}?search=${encodeURIComponent(searchTerm)}`
         : `/products/category/${category}`;
-    const response = await api.get<IProduct[]>(url);
+    const response = await api.get<Product[]>(url);
     return response.data;
 }
 
-export async function getProductDiscounted(): Promise<IProduct[]> {
-    const response = await api.get<IProduct[]>("/products/discounted");
+export async function getProductDiscounted(): Promise<Product[]> {
+    const response = await api.get<Product[]>("/products/discounted");
     return response.data;
 }
 
-export async function getProductsNew(): Promise<IProduct[]> {
-    const response = await api.get<IProduct[]>("/products/nuevos");
+export async function getProductsNew(): Promise<Product[]> {
+    const response = await api.get<Product[]>("/products/nuevos");
     return response.data;
 }

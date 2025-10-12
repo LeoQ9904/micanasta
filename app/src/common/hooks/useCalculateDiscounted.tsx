@@ -1,7 +1,7 @@
 export const calculateDiscountedPrice = (
     price: number,
     discount: number
-): string => {
+): number => {
     const discountedPrice = price - (price * discount) / 100;
-    return discountedPrice.toFixed(3).replace(/\.?0+$/, "");
+    return Number(discountedPrice.toFixed(3).replace(/\.?0+$/, ""));
 };

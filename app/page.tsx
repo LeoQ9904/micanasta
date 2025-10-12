@@ -5,7 +5,7 @@ import NotasComponent from "./src/common/components/NotasComponent";
 import {
     useFindAllProducts,
     useFindAllProductsDestacados,
-} from "@/app/src/hook/useProducts.hook";
+} from "@/app/src/hooks/useProducts.hook";
 
 export default function Home() {
     const { data: products, isLoading, error } = useFindAllProducts();

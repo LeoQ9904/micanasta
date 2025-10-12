@@ -8,7 +8,7 @@ import {
     Tooltip,
 } from "@mui/material";
 import CartComponent from "../../assets/icons/cart";
-import { IProduct } from "../../interfaces/product/Product";
+import { Product } from "../../interfaces/product/Product";
 import { useState } from "react";
 import { useCartStore } from "../../store/cartStore";
 import { VisibilityOutlined } from "@mui/icons-material";
@@ -20,7 +20,7 @@ import { calculateDiscountedPrice } from "../hooks/useCalculateDiscounted";
 import { useCurrencyFormat } from "@/app/src/hooks/useCurrencyFormat";
 
 interface ProductoComponentProps {
-    producto: IProduct;
+    producto: Product;
 }
 
 export default function ProductComponent({ producto }: ProductoComponentProps) {

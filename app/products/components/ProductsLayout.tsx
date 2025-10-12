@@ -5,7 +5,7 @@ import LoadingComponent from "@/app/src/common/components/LoadingComponent";
 import EmptyStateComponent from "@/app/src/common/components/EmptyStateComponent";
 import { BorderAllRounded } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { IProduct } from "@/app/src/interfaces/product/Product";
+import { Product } from "@/app/src/interfaces/product/Product";
 import ProductComponent from "@/app/src/common/components/ProductComponent";
 
 export default function Layout({
@@ -19,7 +19,7 @@ export default function Layout({
     titleHeader: string;
     search: string;
     showCategories: boolean;
-    products: IProduct[];
+    products: Product[];
     isLoading: boolean;
     error: string;
 }) {

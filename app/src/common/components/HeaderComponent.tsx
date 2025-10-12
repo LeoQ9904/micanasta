@@ -46,6 +46,91 @@ export default function HeaderComponent() {
         }
     };
 
+    const menu = () => {
+        return (
+            <nav className="w-full">
+                <ul className="flex gap-8 text-gray-600 font-bold overflow-x-auto text-nowrap">
+                    <li>
+                        <PopoverMenuComponent
+                            Title="Categorías"
+                            Children={<CategoriesListComponent />}
+                        />
+                    </li>
+                    <li className="">
+                        <Button
+                            sx={{
+                                textTransform: "none",
+                                fontWeight: "700",
+                                color: "#4b5563",
+                                "&:hover": {
+                                    backgroundColor: "transparent",
+                                    color: "var(--primary)",
+                                },
+                                fontSize: "16px",
+                            }}
+                            onClick={() => router.push(`/`)}
+                        >
+                            Inicio
+                        </Button>
+                    </li>
+                    <li className="">
+                        <Button
+                            sx={{
+                                textTransform: "none",
+                                fontWeight: "700",
+                                color: "#4b5563",
+                                "&:hover": {
+                                    backgroundColor: "transparent",
+                                    color: "var(--primary)",
+                                },
+                                fontSize: "16px",
+                            }}
+                            onClick={() => router.push(`/products/ofertas`)}
+                        >
+                            Ofertas del día
+                        </Button>
+                    </li>
+                    <li className="">
+                        <Button
+                            sx={{
+                                textTransform: "none",
+                                fontWeight: "700",
+                                color: "#4b5563",
+                                "&:hover": {
+                                    backgroundColor: "transparent",
+                                    color: "var(--primary)",
+                                },
+                                fontSize: "16px",
+                            }}
+                            onClick={() => router.push(`/products/news`)}
+                        >
+                            Nuevos productos
+                        </Button>
+                    </li>
+                    {user && (
+                        <li className="">
+                            <Button
+                                sx={{
+                                    textTransform: "none",
+                                    fontWeight: "700",
+                                    color: "#4b5563",
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                        color: "var(--primary)",
+                                    },
+                                    fontSize: "16px",
+                                }}
+                                onClick={() => router.push(`/orders`)}
+                            >
+                                Mis Pedidos
+                            </Button>
+                        </li>
+                    )}
+                </ul>
+            </nav>
+        );
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % notions.length);
@@ -95,9 +180,6 @@ export default function HeaderComponent() {
                             placeholder="Buscar productos"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyPress={(e) =>
-                                e.key === "Enter" && handleSearch()
-                            }
                         />
                         <IconButton onClick={handleSearch}>
                             <Search />
@@ -144,67 +226,7 @@ export default function HeaderComponent() {
                 </nav>
             </header>
             <header className="hidden md:flex w-full justify-center items-center py-2 px-4 border-b border-gray-100 border-solid">
-                <nav className="w-full">
-                    <ul className="flex gap-8 text-gray-600 font-bold">
-                        <li>
-                            <PopoverMenuComponent
-                                Title="Categorías"
-                                Children={<CategoriesListComponent />}
-                            />
-                        </li>
-                        <li className="">
-                            <Button
-                                sx={{
-                                    textTransform: "none",
-                                    fontWeight: "700",
-                                    color: "#4b5563",
-                                    "&:hover": {
-                                        backgroundColor: "transparent",
-                                        color: "var(--primary)",
-                                    },
-                                    fontSize: "16px",
-                                }}
-                                onClick={() => router.push(`/`)}
-                            >
-                                Inicio
-                            </Button>
-                        </li>
-                        <li className="">
-                            <Button
-                                sx={{
-                                    textTransform: "none",
-                                    fontWeight: "700",
-                                    color: "#4b5563",
-                                    "&:hover": {
-                                        backgroundColor: "transparent",
-                                        color: "var(--primary)",
-                                    },
-                                    fontSize: "16px",
-                                }}
-                                onClick={() => router.push(`/products/ofertas`)}
-                            >
-                                Ofertas del día
-                            </Button>
-                        </li>
-                        <li className="">
-                            <Button
-                                sx={{
-                                    textTransform: "none",
-                                    fontWeight: "700",
-                                    color: "#4b5563",
-                                    "&:hover": {
-                                        backgroundColor: "transparent",
-                                        color: "var(--primary)",
-                                    },
-                                    fontSize: "16px",
-                                }}
-                                onClick={() => router.push(`/products/news`)}
-                            >
-                                Nuevos productos
-                            </Button>
-                        </li>
-                    </ul>
-                </nav>
+                {menu()}
                 <div className="flex gap-2">
                     <ContactIcon />
                     <p className="flex flex-col text-2xl font-black text-[var(--primary)]">
@@ -229,50 +251,7 @@ export default function HeaderComponent() {
                         <Search />
                     </IconButton>
                 </div>
-                <nav className="w-full">
-                    <ul className="flex gap-4 text-gray-600 font-bold text-sm overflow-x-auto">
-                        <li className="whitespace-nowrap">
-                            <PopoverMenuComponent
-                                Title="Categorías"
-                                Children={<CategoriesListComponent />}
-                            />
-                        </li>
-                        <li className="whitespace-nowrap">
-                            <Button
-                                sx={{
-                                    textTransform: "none",
-                                    fontWeight: "700",
-                                    color: "#4b5563",
-                                    "&:hover": {
-                                        backgroundColor: "transparent",
-                                        color: "var(--primary)",
-                                    },
-                                    fontSize: "14px",
-                                    minWidth: "auto",
-                                }}
-                            >
-                                Ofertas del día
-                            </Button>
-                        </li>
-                        <li className="whitespace-nowrap">
-                            <Button
-                                sx={{
-                                    textTransform: "none",
-                                    fontWeight: "700",
-                                    color: "#4b5563",
-                                    "&:hover": {
-                                        backgroundColor: "transparent",
-                                        color: "var(--primary)",
-                                    },
-                                    fontSize: "14px",
-                                    minWidth: "auto",
-                                }}
-                            >
-                                Nuevos productos
-                            </Button>
-                        </li>
-                    </ul>
-                </nav>
+                {menu()}
             </div>
             <Drawer
                 anchor="right"

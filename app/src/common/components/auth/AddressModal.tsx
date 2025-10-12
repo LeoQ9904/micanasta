@@ -94,14 +94,6 @@ export default function AddressModal({
             setError("El estado/provincia es requerido");
             return false;
         }
-        if (!formData.zipCode.trim()) {
-            setError("El código postal es requerido");
-            return false;
-        }
-        if (!formData.country.trim()) {
-            setError("El país es requerido");
-            return false;
-        }
         return true;
     };
 
@@ -282,41 +274,15 @@ export default function AddressModal({
                                 value={formData.city}
                                 onChange={handleChange("city")}
                                 disabled={isLoading}
-                                placeholder="Ej: Caracas"
+                                placeholder="Ej: Bucaramanga"
                             />
                             <TextField
                                 fullWidth
-                                label="Estado/Provincia *"
+                                label="Departamento *"
                                 value={formData.state}
                                 onChange={handleChange("state")}
                                 disabled={isLoading}
-                                placeholder="Ej: Distrito Capital"
-                            />
-                        </Box>
-
-                        {/* Zip Code and Country */}
-                        <Box
-                            sx={{
-                                display: "flex",
-                                gap: 2,
-                                flexDirection: { xs: "column", sm: "row" },
-                            }}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Código Postal *"
-                                value={formData.zipCode}
-                                onChange={handleChange("zipCode")}
-                                disabled={isLoading}
-                                placeholder="Ej: 1010"
-                            />
-                            <TextField
-                                fullWidth
-                                label="País *"
-                                value={formData.country}
-                                onChange={handleChange("country")}
-                                disabled={isLoading}
-                                placeholder="Ej: Venezuela"
+                                placeholder="Ej: Santander"
                             />
                         </Box>
 

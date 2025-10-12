@@ -1,5 +1,5 @@
 "use client";
-import { useFindProductDiscounted } from "@/app/src/hook/useProducts.hook";
+import { useFindProductDiscounted } from "@/app/src/hooks/useProducts.hook";
 import Layout from "../components/ProductsLayout";
 
 export default function OfertasPage() {

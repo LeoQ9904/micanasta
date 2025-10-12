@@ -1,5 +1,5 @@
 import { ICategory } from "../src/interfaces/product/Category";
-import { IProduct } from "../src/interfaces/product/Product";
+import { Product } from "../src/interfaces/product/Product";
 
 export interface cardNotas {
     description: string;

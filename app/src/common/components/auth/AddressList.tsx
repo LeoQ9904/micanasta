@@ -219,7 +219,6 @@ export default function AddressList() {
                                 {/* Badge de dirección predeterminada */}
                                 {address.isDefault && (
                                     <Chip
-                                        icon={<Home />}
                                         label="Predeterminada"
                                         size="small"
                                         sx={{

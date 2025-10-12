@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { IProduct } from "@/app/src/interfaces/product/Product";
-import { useFindProductByCategory } from "@/app/src/hook/useProducts.hook";
+import { Product } from "@/app/src/interfaces/product/Product";
+import { useFindProductByCategory } from "@/app/src/hooks/useProducts.hook";
 import Layout from "./ProductsLayout";
 
 interface CategoryPageClientProps {
@@ -13,7 +13,7 @@ export default function CategoryPageClient({
     categoryId,
     searchTerm,
 }: CategoryPageClientProps) {
-    const [products, setProducts] = useState<IProduct[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const { data, isLoading, error } = useFindProductByCategory(
         categoryId,
         searchTerm

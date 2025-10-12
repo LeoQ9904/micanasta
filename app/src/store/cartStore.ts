@@ -1,21 +1,22 @@
 "use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { IProduct } from "../interfaces/product/Product";
+import { Product } from "../interfaces/product/Product";
 
 export interface CartItem {
-    product: IProduct;
+    product: Product;
     quantity: number;
 }
 
 interface CartStore {
     items: CartItem[];
     openCart: boolean;
-    addItem: (product: IProduct, quantity?: number) => void;
+    addItem: (product: Product, quantity?: number) => void;
     removeItem: (productTitle: string) => void;
     updateQuantity: (productTitle: string, quantity: number) => void;
     clearCart: () => void;
     getTotal: () => number;
+    getDiscount: () => number;
     toggleCart: () => void;
 }
 
@@ -29,7 +30,7 @@ export const useCartStore = create<CartStore>()(
                 set((state) => ({ openCart: !state.openCart }));
             },
 
-            addItem: (product: IProduct, quantity = 1) => {
+            addItem: (product: Product, quantity = 1) => {
                 set((state) => {
                     const existingItem = state.items.find(
                         (item) => item.product.name === product.name
@@ -82,6 +83,17 @@ export const useCartStore = create<CartStore>()(
                     const discountedPrice =
                         item.product.price * (1 - item.product.discount / 100);
                     return sum + discountedPrice * item.quantity;
+                }, 0);
+            },
+
+            getDiscount: () => {
+                const { items } = get();
+                return items.reduce((sum, item) => {
+                    const discountAmount =
+                        item.product.price *
+                        (item.product.discount / 100) *
+                        item.quantity;
+                    return sum + discountAmount;
                 }, 0);
             },
         }),

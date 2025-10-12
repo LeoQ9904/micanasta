@@ -6,13 +6,13 @@ import {
     getProductsNew,
 } from "@/app/src/services/productos.service";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IProduct } from "../interfaces/product/Product";
+import { Product } from "../interfaces/product/Product";
 import { useProductStore } from "@/app/src/store/productStore";
 
 // Hook para obtener todos los productos
 export function useFindAllProducts() {
     const fetchProducts = useProductStore((state) => state.setProductos);
-    return useQuery<IProduct[], Error>({
+    return useQuery<Product[], Error>({
         queryKey: ["getFindAllProducts"],
         queryFn: async () => {
             const data = await getProducts();
@@ -27,7 +27,7 @@ export function useFindAllProducts() {
 // Hook para obtener todos los productos
 export function useFindAllProductsDestacados() {
     const fetchProducts = useProductStore((state) => state.setPopularProducts);
-    return useQuery<IProduct[], Error>({
+    return useQuery<Product[], Error>({
         queryKey: ["getFindAllProductsDestacados"],
         queryFn: async () => {
             const data = await getProductPopular();
@@ -44,7 +44,7 @@ export function useFindProductByCategory(
     category: string,
     searchTerm?: string
 ) {
-    return useQuery<IProduct[], Error>({
+    return useQuery<Product[], Error>({
         queryKey: ["getProductByCategory", category, searchTerm],
         queryFn: () => getProductByCategory(category, searchTerm),
         enabled: !!category,
@@ -56,7 +56,7 @@ export function useFindProductByCategory(
 // Hook para obtener el listado de productos con descuentos.
 export function useFindProductDiscounted() {
     getProductDiscounted;
-    return useQuery<IProduct[], Error>({
+    return useQuery<Product[], Error>({
         queryKey: ["getProductDiscounted"],
         queryFn: () => getProductDiscounted(),
         staleTime: 1000 * 60 * 5, // 5 minutos
@@ -67,7 +67,7 @@ export function useFindProductDiscounted() {
 // Hook para obtener el listado de productos con descuentos.
 export function useFindProductsNews() {
     getProductsNew;
-    return useQuery<IProduct[], Error>({
+    return useQuery<Product[], Error>({
         queryKey: ["getProductsNew"],
         queryFn: () => getProductsNew(),
         staleTime: 1000 * 60 * 5, // 5 minutos
@@ -77,7 +77,7 @@ export function useFindProductsNews() {
 
 // Hook para obtener un producto por ID (para implementar más adelante)
 export function useFindProductById(id: string) {
-    return useQuery<IProduct, Error>({
+    return useQuery<Product, Error>({
         queryKey: ["getProductById", id],
         queryFn: () => {
             // TODO: Implementar getProductById en el servicio
@@ -92,7 +92,7 @@ export function useFindProductById(id: string) {
 export function useCreateProduct() {
     const queryClient = useQueryClient();
 
-    return useMutation<IProduct, Error, Omit<IProduct, "id">>({
+    return useMutation<Product, Error, Omit<Product, "id">>({
         mutationFn: (productData) => {
             // TODO: Implementar createProduct en el servicio
             throw new Error("Not implemented yet");
@@ -108,11 +108,7 @@ export function useCreateProduct() {
 export function useUpdateProduct() {
     const queryClient = useQueryClient();
 
-    return useMutation<
-        IProduct,
-        Error,
-        { id: string; data: Partial<IProduct> }
-    >({
+    return useMutation<Product, Error, { id: string; data: Partial<Product> }>({
         mutationFn: ({ id, data }) => {
             // TODO: Implementar updateProduct en el servicio
             throw new Error("Not implemented yet");

@@ -34,7 +34,7 @@ export default function ProfilePage() {
     }
 
     const handleBack = () => {
-        router.push("/");
+        router.back();
     };
 
     return <ProfileManagement onBack={handleBack} />;

@@ -22,6 +22,7 @@ import {
 import { useAuthStore } from "@/app/src/store/authStore";
 import UpdateProfileModal from "./UpdateProfileModal";
 import AddressList from "./AddressList";
+import HeaderPage from "../HeaderPage";
 
 interface ProfileManagementProps {
     onBack?: () => void;
@@ -86,21 +87,13 @@ export default function ProfileManagement({ onBack }: ProfileManagementProps) {
 
     return (
         <Box sx={{ width: "100%", maxWidth: 800, mx: "auto", p: 3 }}>
-            {/* Header */}
-            <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-                {onBack && (
-                    <IconButton onClick={onBack} sx={{ mr: 2 }}>
-                        <ArrowBack />
-                    </IconButton>
-                )}
-                <Settings sx={{ mr: 1, color: "var(--primary)" }} />
-                <Typography variant="h4" fontWeight="bold">
-                    Gestión de Perfil
-                </Typography>
-            </Box>
+            <HeaderPage
+                title="Gestión de Perfil"
+                Icon={<Settings sx={{ mr: 1, color: "var(--primary)" }} />}
+            />
 
             {/* Perfil Summary Card */}
-            <Card sx={{ mb: 3, boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
+            <Card sx={{ mb: 3, boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)" }}>
                 <CardContent>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                         <Box sx={{ position: "relative" }}>
@@ -210,7 +203,7 @@ export default function ProfileManagement({ onBack }: ProfileManagementProps) {
             {/* Tab Panels */}
             <TabPanel value={tabValue} index={0}>
                 {/* Información Personal */}
-                <Card sx={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
+                <Card sx={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)" }}>
                     <CardContent>
                         <Typography
                             variant="h6"
