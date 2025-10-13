@@ -11,6 +11,7 @@ export default function NotasComponent() {
     return (
         <div className="flex flex-wrap md:flex-nowrap gap-8">
             {data?.map((card, index) => (
+                card.isVisible && (
                 <Card
                     key={index}
                     className="w-full md:w-1/3 h-[280px] p-4 flex flex-col justify-between"
@@ -43,6 +44,7 @@ export default function NotasComponent() {
                         </button>
                     </div>
                 </Card>
+                )
             ))}
         </div>
     );
