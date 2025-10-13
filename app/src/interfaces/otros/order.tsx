@@ -14,4 +14,5 @@ export default interface Order {
     status: OrderStatus;
     totalDiscount: number;
     totalPrice: number;
+    numberOrder?: number;
 }

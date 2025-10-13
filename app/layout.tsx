@@ -28,7 +28,7 @@ export default function RootLayout({
                 <meta name="pragma" content="no-cache" />
                 <meta name="expires" content="0" />
                 <meta name="app-version" content="1.0.2" />
-                <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+                <link rel="icon" href="/logo.png" type="image/svg+xml" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link
                     rel="preconnect"

@@ -14,10 +14,11 @@ import {
     Close,
     ExitToApp,
     Email,
-    Edit,
     Settings,
-    LocationOn,
     Receipt,
+    Phone,
+    CheckCircle,
+    Warning,
 } from "@mui/icons-material";
 import { useAuthStore } from "@/app/src/store/authStore";
 import { logout } from "@/app/src/lib/auth";
@@ -66,10 +67,6 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
         return `https://ui-avatars.com/api/?name=${encodeURIComponent(getDisplayName())}&background=random`;
     };
 
-    const handleUpdateProfile = () => {
-        setUpdateModalOpen(true);
-    };
-
     const handleCloseUpdateModal = () => {
         setUpdateModalOpen(false);
     };
@@ -93,7 +90,7 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                 sx={{
                     "& .MuiDrawer-paper": {
                         width: { xs: "100vw", sm: 350 },
-                        p: 3,
+                        p: 2,
                     },
                 }}
             >
@@ -102,15 +99,22 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        mb: 3,
+                        mb: 2,
                     }}
                 >
-                    <Typography variant="h6" fontWeight="bold">
-                        Mi Perfil
+                    <Typography variant="h6" fontWeight={600}>
+                        Mi Cuenta
                     </Typography>
-                    <Button onClick={onClose} sx={{ minWidth: "auto", p: 1 }}>
-                        <Close />
-                    </Button>
+                    <IconButton
+                        onClick={onClose}
+                        size="small"
+                        sx={{
+                            color: "text.secondary",
+                            "&:hover": { backgroundColor: "grey.100" },
+                        }}
+                    >
+                        <Close fontSize="small" />
+                    </IconButton>
                 </Box>
 
                 {user && customer && (
@@ -120,203 +124,249 @@ export default function UserDrawer({ open, onClose }: UserDrawerProps) {
                                 display: "flex",
                                 flexDirection: "column",
                                 alignItems: "center",
-                                mb: 3,
+                                mb: 2,
                             }}
                         >
-                            <Box sx={{ position: "relative", mb: 2 }}>
-                                <Avatar
-                                    src={getAvatarUrl()}
-                                    sx={{ width: 80, height: 80 }}
-                                />
-                                <IconButton
-                                    onClick={handleUpdateProfile}
-                                    sx={{
-                                        position: "absolute",
-                                        bottom: -5,
-                                        right: -5,
-                                        backgroundColor: "var(--primary)",
-                                        color: "white",
-                                        width: 30,
-                                        height: 30,
-                                        "&:hover": {
-                                            backgroundColor: "var(--primary)",
-                                            opacity: 0.9,
-                                        },
-                                    }}
-                                >
-                                    <Edit fontSize="small" />
-                                </IconButton>
-                            </Box>
+                            <Avatar
+                                src={getAvatarUrl()}
+                                sx={{
+                                    width: 64,
+                                    height: 64,
+                                    mb: 1.5,
+                                    border: "2px solid",
+                                    borderColor: "grey.200",
+                                }}
+                            />
                             <Typography
-                                variant="h6"
-                                fontWeight="bold"
+                                variant="subtitle1"
+                                fontWeight={600}
                                 textAlign="center"
+                                sx={{ mb: 0.5 }}
                             >
                                 {getDisplayName()}
                             </Typography>
                             <Box
                                 sx={{
                                     display: "flex",
-                                    alignItems: "center",
-                                    gap: 1,
-                                    mt: 1,
+                                    flexDirection: "column",
+                                    alignItems: "start",
+                                    mb: 2,
                                 }}
                             >
-                                <Email fontSize="small" color="action" />
                                 <Typography
                                     variant="body2"
                                     color="text.secondary"
+                                    textAlign="center"
+                                    sx={{ mb: 1 }}
                                 >
                                     {customer.email}
                                 </Typography>
-                            </Box>
-                            {customer.phoneNumber && (
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    sx={{ mt: 1 }}
+
+                                {/* Estado de verificación del email */}
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                        mb: customer.phoneNumber ? 1 : 0,
+                                    }}
                                 >
-                                    📞 {customer.phoneNumber}
-                                </Typography>
-                            )}
-                            {customer.addresses &&
-                                customer.addresses.length > 0 && (
+                                    {user.emailVerified ? (
+                                        <CheckCircle
+                                            sx={{
+                                                fontSize: 16,
+                                                color: "success.main",
+                                            }}
+                                        />
+                                    ) : (
+                                        <Warning
+                                            sx={{
+                                                fontSize: 16,
+                                                color: "warning.main",
+                                            }}
+                                        />
+                                    )}
+                                    <Typography
+                                        variant="caption"
+                                        color={
+                                            user.emailVerified
+                                                ? "success.main"
+                                                : "warning.main"
+                                        }
+                                        fontWeight={500}
+                                    >
+                                        {user.emailVerified
+                                            ? "Email verificado"
+                                            : "Email no verificado"}
+                                    </Typography>
+                                </Box>
+
+                                {/* Número de teléfono si existe */}
+                                {customer.phoneNumber && (
                                     <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
                                             gap: 1,
-                                            mt: 1,
                                         }}
                                     >
-                                        <LocationOn
-                                            fontSize="small"
-                                            color="action"
+                                        <Phone
+                                            sx={{
+                                                fontSize: 16,
+                                                color: "text.secondary",
+                                            }}
                                         />
                                         <Typography
-                                            variant="body2"
+                                            variant="caption"
                                             color="text.secondary"
                                         >
-                                            {customer.addresses.length}{" "}
-                                            dirección
-                                            {customer.addresses.length !== 1
-                                                ? "es"
-                                                : ""}{" "}
-                                            guardada
-                                            {customer.addresses.length !== 1
-                                                ? "s"
-                                                : ""}
+                                            {customer.phoneNumber}
                                         </Typography>
                                     </Box>
                                 )}
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 1,
-                                    mt: 1,
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        width: 8,
-                                        height: 8,
-                                        borderRadius: "50%",
-                                        backgroundColor: user.emailVerified
-                                            ? "success.main"
-                                            : "warning.main",
-                                    }}
-                                />
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                >
-                                    {user.emailVerified
-                                        ? "Email verificado"
-                                        : "Email no verificado"}
-                                </Typography>
                             </Box>
                         </Box>
 
-                        <Divider sx={{ mb: 3 }} />
+                        <Divider sx={{ mb: 2 }} />
 
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            startIcon={<Settings />}
-                            onClick={handleGoToProfile}
+                        <Box
                             sx={{
-                                mb: 2,
-                                backgroundColor: "#f5f5f5",
-                                color: "text.primary",
-                                py: 1.2,
-                                textTransform: "none",
-                                fontWeight: 500,
-                                boxShadow: "none",
-                                "&:hover": {
-                                    backgroundColor: "#eeeeee",
-                                    boxShadow: "none",
-                                },
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
                             }}
                         >
-                            Gestionar Perfil
-                        </Button>
-
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            startIcon={<Receipt />}
-                            onClick={handleGoToOrders}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: "#f5f5f5",
-                                color: "text.primary",
-                                py: 1.2,
-                                textTransform: "none",
-                                fontWeight: 500,
-                                boxShadow: "none",
-                                "&:hover": {
-                                    backgroundColor: "#eeeeee",
-                                    boxShadow: "none",
-                                },
-                            }}
-                        >
-                            Mis Pedidos
-                        </Button>
-
-                        {!user.emailVerified && (
                             <Button
                                 fullWidth
-                                variant="outlined"
-                                onClick={handleVerifyEmail}
+                                startIcon={
+                                    <Settings
+                                        sx={{
+                                            fontSize: "20px !important",
+                                            minWidth: 20,
+                                            display: "flex",
+                                            justifyContent: "center",
+                                        }}
+                                    />
+                                }
+                                onClick={handleGoToProfile}
                                 sx={{
-                                    mb: 2,
-                                    borderColor: "var(--primary)",
-                                    color: "var(--primary)",
+                                    justifyContent: "flex-start",
+                                    px: 2,
+                                    py: 1.2,
+                                    color: "text.primary",
+                                    textTransform: "none",
+                                    fontWeight: 500,
                                     "&:hover": {
-                                        backgroundColor: "var(--primary)",
-                                        color: "white",
-                                        opacity: 0.1,
+                                        backgroundColor: "grey.50",
+                                    },
+                                    "& .MuiButton-startIcon": {
+                                        marginRight: 2,
+                                        marginLeft: 0,
+                                        width: 20,
                                     },
                                 }}
                             >
-                                Verificar Email
+                                Gestionar Cuenta
                             </Button>
-                        )}
+
+                            <Button
+                                fullWidth
+                                startIcon={
+                                    <Receipt
+                                        sx={{
+                                            fontSize: "20px !important",
+                                            minWidth: 20,
+                                            display: "flex",
+                                            justifyContent: "center",
+                                        }}
+                                    />
+                                }
+                                onClick={handleGoToOrders}
+                                sx={{
+                                    justifyContent: "flex-start",
+                                    px: 2,
+                                    py: 1.2,
+                                    color: "text.primary",
+                                    textTransform: "none",
+                                    fontWeight: 500,
+                                    "&:hover": {
+                                        backgroundColor: "grey.50",
+                                    },
+                                    "& .MuiButton-startIcon": {
+                                        marginRight: 2,
+                                        marginLeft: 0,
+                                        width: 20,
+                                    },
+                                }}
+                            >
+                                Mis Pedidos
+                            </Button>
+
+                            {!user.emailVerified && (
+                                <Button
+                                    fullWidth
+                                    startIcon={
+                                        <Email
+                                            sx={{
+                                                fontSize: "20px !important",
+                                                minWidth: 20,
+                                                display: "flex",
+                                                justifyContent: "center",
+                                            }}
+                                        />
+                                    }
+                                    onClick={handleVerifyEmail}
+                                    sx={{
+                                        justifyContent: "flex-start",
+                                        px: 2,
+                                        py: 1.2,
+                                        color: "warning.main",
+                                        textTransform: "none",
+                                        fontWeight: 500,
+                                        "&:hover": {
+                                            backgroundColor: "warning.50",
+                                        },
+                                        "& .MuiButton-startIcon": {
+                                            marginRight: 2,
+                                            marginLeft: 0,
+                                            width: 20,
+                                        },
+                                    }}
+                                >
+                                    Verificar Email
+                                </Button>
+                            )}
+                        </Box>
+
+                        <Divider sx={{ my: 2 }} />
 
                         <Button
                             fullWidth
-                            variant="text"
-                            startIcon={<ExitToApp />}
+                            startIcon={
+                                <ExitToApp
+                                    sx={{
+                                        fontSize: "20px !important",
+                                        minWidth: 20,
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                />
+                            }
                             onClick={handleLogout}
                             sx={{
-                                color: "#666",
+                                justifyContent: "flex-start",
+                                px: 2,
                                 py: 1.2,
+                                color: "error.main",
                                 textTransform: "none",
                                 fontWeight: 500,
                                 "&:hover": {
-                                    backgroundColor: "#f5f5f5",
-                                    color: "#d32f2f",
+                                    backgroundColor: "error.50",
+                                },
+                                "& .MuiButton-startIcon": {
+                                    marginRight: 2,
+                                    marginLeft: 0,
+                                    width: 20,
                                 },
                             }}
                         >

@@ -88,7 +88,7 @@ export default function ProfileManagement({ onBack }: ProfileManagementProps) {
     return (
         <Box sx={{ width: "100%", maxWidth: 800, mx: "auto", p: 3 }}>
             <HeaderPage
-                title="Gestión de Perfil"
+                title="Gestión de cuenta"
                 Icon={<Settings sx={{ mr: 1, color: "var(--primary)" }} />}
             />
 

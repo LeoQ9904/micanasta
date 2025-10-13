@@ -5,6 +5,7 @@ import { useCartStore } from "../src/store/cartStore";
 import { useAuthStore } from "../src/store/authStore";
 import { useCurrencyFormat } from "../src/hooks/useCurrencyFormat";
 import { registerOrder } from "../src/services/order.service";
+import { sendEmailVerification } from "firebase/auth";
 import {
     Button,
     Card,
@@ -13,6 +14,11 @@ import {
     Typography,
     Box,
     Chip,
+    Alert,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from "@mui/material";
 import { Add, Settings, Receipt } from "@mui/icons-material";
 import { Address } from "../src/interfaces/users/Customer";
@@ -20,11 +26,12 @@ import HeaderPage from "../src/common/components/HeaderPage";
 import ListItems from "../cart/components/ListItems";
 import Order, { OrderStatus } from "../src/interfaces/otros/order";
 import OrderConfirmationModal from "./components/OrderConfirmationModal";
+import LoginModal from "../src/common/components/auth/LoginModal";
 
 export default function CheckoutPage() {
     const router = useRouter();
     const { getTotal, getDiscount, items, clearCart } = useCartStore();
-    const { customer } = useAuthStore();
+    const { customer, user } = useAuthStore();
     const total = getTotal();
     const discount = getDiscount();
     const formatCurrency = useCurrencyFormat({ currency: "COP" });
@@ -34,6 +41,9 @@ export default function CheckoutPage() {
     );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showEmailVerificationDialog, setShowEmailVerificationDialog] =
+        useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
     const [lastOrderNumber, setLastOrderNumber] = useState<
         number | undefined
     >();
@@ -48,7 +58,19 @@ export default function CheckoutPage() {
     }, [customer]);
 
     const handleSubmit = async () => {
-        if (!selectedAddress || !items.length || !customer) return;
+        // Validar que el usuario esté autenticado
+        if (!user || !customer) {
+            setShowLoginModal(true);
+            return;
+        }
+
+        if (!selectedAddress || !items.length) return;
+
+        // Validar que el email esté verificado
+        if (!user.emailVerified) {
+            setShowEmailVerificationDialog(true);
+            return;
+        }
 
         setIsSubmitting(true);
 
@@ -66,9 +88,7 @@ export default function CheckoutPage() {
 
             // Limpiar el carrito después de crear el pedido exitosamente
             clearCart();
-
-            // Generar número de pedido (puedes usar el ID del response si está disponible)
-            const orderNumber = Math.floor(Math.random() * 1000) + 1;
+            const orderNumber = response.numberOrder || 1;
             setLastOrderNumber(orderNumber);
 
             // Mostrar modal de confirmación
@@ -83,6 +103,22 @@ export default function CheckoutPage() {
         }
     };
 
+    const handleSendVerificationEmail = async () => {
+        if (user) {
+            try {
+                await sendEmailVerification(user);
+                alert(
+                    "Email de verificación enviado. Revisa tu bandeja de entrada y tu carpeta de spam."
+                );
+            } catch (error) {
+                console.error("Error enviando email de verificación:", error);
+                alert(
+                    "Error al enviar el email de verificación. Inténtalo de nuevo."
+                );
+            }
+        }
+    };
+
     const addresses = customer?.addresses || [];
 
     return (
@@ -91,6 +127,28 @@ export default function CheckoutPage() {
                 title="Confirmación de pedido"
                 Icon={<Receipt sx={{ mr: 1, color: "var(--primary)" }} />}
             />
+
+            {/* Alerta de email no verificado */}
+            {user && !user.emailVerified && (
+                <Alert
+                    severity="warning"
+                    sx={{ mb: 3 }}
+                    action={
+                        <Button
+                            color="inherit"
+                            size="small"
+                            onClick={handleSendVerificationEmail}
+                        >
+                            Verificar ahora
+                        </Button>
+                    }
+                >
+                    <Typography variant="body2">
+                        Tu email no está verificado. Debes verificar tu email
+                        para poder realizar pedidos.
+                    </Typography>
+                </Alert>
+            )}
 
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
                 <p className="text-2xl font-semibold">
@@ -109,7 +167,40 @@ export default function CheckoutPage() {
                 <ListItems />
             </Box>
 
-            {addresses.length === 0 ? (
+            {!user || !customer ? (
+                <Card sx={{ textAlign: "center", py: 4, mb: 3 }}>
+                    <CardContent>
+                        <Typography
+                            variant="h6"
+                            color="text.secondary"
+                            gutterBottom
+                        >
+                            Debes iniciar sesión para continuar
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ mb: 2 }}
+                        >
+                            Para realizar un pedido necesitas tener una cuenta y
+                            estar autenticado.
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            onClick={() => setShowLoginModal(true)}
+                            sx={{
+                                mt: 2,
+                                backgroundColor: "var(--primary)",
+                                "&:hover": {
+                                    backgroundColor: "var(--primary)",
+                                },
+                            }}
+                        >
+                            Iniciar Sesión
+                        </Button>
+                    </CardContent>
+                </Card>
+            ) : addresses.length === 0 ? (
                 <Card sx={{ textAlign: "center", py: 4, mb: 3 }}>
                     <CardContent>
                         <Typography
@@ -236,7 +327,13 @@ export default function CheckoutPage() {
                     <Button
                         variant="contained"
                         fullWidth
-                        disabled={!selectedAddress || isSubmitting}
+                        disabled={
+                            !user ||
+                            !customer ||
+                            !selectedAddress ||
+                            isSubmitting ||
+                            (user && !user.emailVerified)
+                        }
                         onClick={handleSubmit}
                         sx={{
                             height: 48,
@@ -250,9 +347,13 @@ export default function CheckoutPage() {
                             },
                         }}
                     >
-                        {isSubmitting
-                            ? "Procesando pedido..."
-                            : "Confirmar pedido"}
+                        {!user || !customer
+                            ? "Inicia sesión para continuar"
+                            : isSubmitting
+                              ? "Procesando pedido..."
+                              : !user?.emailVerified
+                                ? "Verifica tu email para continuar"
+                                : "Confirmar pedido"}
                     </Button>
                 </>
             )}
@@ -262,6 +363,54 @@ export default function CheckoutPage() {
                 onClose={() => setShowConfirmationModal(false)}
                 orderNumber={lastOrderNumber}
             />
+
+            {/* Modal de Login */}
+            <LoginModal
+                open={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+            />
+
+            {/* Diálogo de verificación de email */}
+            <Dialog
+                open={showEmailVerificationDialog}
+                onClose={() => setShowEmailVerificationDialog(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Email no verificado</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                        Para continuar con tu pedido, necesitas verificar tu
+                        dirección de email.
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Te enviaremos un email de verificación a{" "}
+                        <strong>{customer?.email}</strong>. Revisa tu bandeja de
+                        entrada y tu carpeta de spam.
+                    </Typography>
+                </DialogContent>
+                <DialogActions sx={{ p: 3, pt: 1 }}>
+                    <Button
+                        onClick={() => setShowEmailVerificationDialog(false)}
+                        color="inherit"
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            handleSendVerificationEmail();
+                            setShowEmailVerificationDialog(false);
+                        }}
+                        variant="contained"
+                        sx={{
+                            backgroundColor: "var(--primary)",
+                            "&:hover": { backgroundColor: "var(--primary)" },
+                        }}
+                    >
+                        Enviar verificación
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

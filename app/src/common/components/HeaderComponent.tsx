@@ -154,7 +154,7 @@ export default function HeaderComponent() {
                 }
             >
                 <Image
-                    src="/logo.svg"
+                    src="/logo.png"
                     alt="Mi Canasta"
                     width={120}
                     height={40}

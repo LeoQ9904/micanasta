@@ -83,7 +83,7 @@ export default function OrdersPage() {
                         <OrderCard
                             key={index}
                             order={order}
-                            orderNumber={index + 1}
+                            orderNumber={order.numberOrder || 1}
                         />
                     ))}
                 </div>
