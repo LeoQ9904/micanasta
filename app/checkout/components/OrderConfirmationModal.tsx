@@ -31,7 +31,7 @@ export default function OrderConfirmationModal({
 
     const handleContinueShopping = () => {
         onClose();
-        router.push("/products");
+        router.push("/products/?category=Todos");
     };
 
     return (

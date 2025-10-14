@@ -360,7 +360,10 @@ export default function CheckoutPage() {
 
             <OrderConfirmationModal
                 open={showConfirmationModal}
-                onClose={() => setShowConfirmationModal(false)}
+                onClose={() => {
+                    router.push("/");
+                    setShowConfirmationModal(false);
+                }}
                 orderNumber={lastOrderNumber}
             />
 
